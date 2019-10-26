@@ -5,6 +5,7 @@
   become_user: root
 
   roles:
+    - x
     - go
     - dwm
     - st

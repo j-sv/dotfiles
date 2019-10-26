@@ -1,0 +1,15 @@
+- name: ~/.xsession
+  file:
+    src: "{{ role_path }}/files/xsession"
+    path: "{{ lookup('env', 'HOME') }}/.xsession"
+    state: link
+- name: ~/.xinitrc
+  file:
+    src: "{{ role_path }}/files/xinitrc"
+    path: "{{ lookup('env', 'HOME') }}/.xinitrc"
+    state: link
+- name: ~/.Xdefaults
+  file:
+    src: "{{ role_path }}/files/xinitrc"
+    path: "{{ lookup('env', 'HOME') }}/.Xdefaults"
+    state: link
