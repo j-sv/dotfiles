@@ -1,0 +1,31 @@
+- name: make sure ~/src exists for clones
+  file:
+    path: ~/src
+    state: directory
+- name: remove any prior clone
+  file:
+    path: ~/src/slock
+    state: absent
+- name: clone dwm repository
+  git:
+    repo: git://github.com/j-sv/slock
+    dest: ~/src/slock
+    update: yes
+    force: yes
+- name: checkout patches tag
+  command: git checkout j-sv-1.4
+  args:
+    chdir: ~/src/slock
+- name: build
+  make:
+    chdir: ~/src/slock
+- name: install
+  make:
+    chdir: "{{ lookup('env', 'HOME') }}/src/slock"
+    target: install
+  become: yes
+- name: suid
+  file:
+    path: /usr/local/bin/slock
+    mode: u+s
+  become: yes
