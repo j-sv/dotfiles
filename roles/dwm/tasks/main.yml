@@ -1,0 +1,26 @@
+- name: make sure ~/src exists for clones
+  file:
+    path: ~/src
+    state: directory
+- name: remove any prior clone
+  file:
+    path: ~/src/dwm
+    state: absent
+- name: clone dwm repository
+  git:
+    repo: git://github.com/j-sv/dwm
+    dest: ~/src/dwm
+    update: yes
+    force: yes
+- name: checkout patches tag
+  command: git checkout j-sv-6.2
+  args:
+    chdir: ~/src/dwm
+- name: build
+  make:
+    chdir: ~/src/dwm
+- name: install
+  make:
+    chdir: "{{ lookup('env', 'HOME') }}/src/dwm"
+    target: install
+  become: yes

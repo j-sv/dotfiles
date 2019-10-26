@@ -1,0 +1,114 @@
+call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-unimpaired'
+
+Plug 'itchyny/lightline.vim'
+Plug 'tmux-plugins/vim-tmux'
+Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
+" fzf
+Plug 'junegunn/fzf', { 'tag': '*', 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'tweekmonster/fzf-filemru'
+
+" fancy colors
+Plug 'lifepillar/vim-solarized8'
+
+" git stuff
+Plug 'tpope/vim-fugitive', { 'tag': '*' }
+Plug 'sodapopcan/vim-twiggy', { 'tag': '*' }
+Plug 'airblade/vim-gitgutter'
+
+" syntax related stuff
+Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoUpdateBinaries' }
+
+call plug#end()
+
+" ui
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
+set background=dark
+colorscheme solarized8
+
+hi StatusLine  ctermfg=246 ctermbg=NONE guifg=#839496 guibg=NONE guisp=NONE cterm=NONE gui=NONE
+hi StatusLineN ctermfg=242 ctermbg=NONE guifg=#586e75 guibg=NONE guisp=NONE cterm=NONE gui=NONE
+hi LineNr      ctermfg=242 ctermbg=NONE guifg=#586e75 guibg=NONE guisp=NONE cterm=NONE gui=NONE
+
+hi clear SignColum
+hi SignColumn ctermbg=NONE
+hi LineNr     ctermbg=NONE
+hi Normal     ctermbg=NONE
+hi nonText    ctermbg=NONE
+
+" search
+set ignorecase
+set smartcase
+
+" tabs
+set expandtab
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+
+" general
+set clipboard^=unnamed
+set cmdheight=2
+set number
+
+" mappings
+let mapleader=","
+
+nmap <Tab> <c-w>w
+nmap <S-Tab> <c-w>W
+
+nmap <leader>w :w!<cr>
+map <leader><space> :let @/=''
+
+nnoremap <silent><C-p> :FilesMru<cr>
+nnoremap <silent><C-l> :Lines<cr>
+
+" fzf
+set rtp+=~/.fzf
+
+function! LightlineGetBranch()
+    if !exists('*fugitive#head')
+        return ''
+    endif
+
+    let head = fugitive#head(10)
+
+    if head == ''
+      return ''
+    endif
+    return '' . head
+endfunction
+
+function! LightlineReadonly()
+  if &readonly || !&modifiable
+    return ''
+  else
+    return ''
+  endif
+endfunction
+
+function! LightlineFilename()
+  let filename = winwidth(0) > 70 ? expand('%') : expand('%t')
+  return fnamemodify(filename, ":~:.")
+endfunction
+
+let g:lightline = {
+  \ 'colorscheme': 'solarized',
+  \ 'active': {
+  \   'left': [ [ 'mode', 'paste' ],
+  \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+  \   'right': [ [ 'lineinfo' ], [ 'percent' ],
+  \              [ 'fileformat', 'filetype', 'fileencoding' ] ]
+  \ },
+  \ 'component_function': {
+  \   'gitbranch': 'LightlineGetBranch',
+  \   'readonly': 'LightlineReadonly',
+  \   'filename': 'LightlineFilename',
+  \ }
+  \ }

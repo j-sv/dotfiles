@@ -1,0 +1,4 @@
+version: 8.1.2218
+uri: "https://github.com/vim/vim/archive/v{{ version }}.tar.gz"
+download_to: "{{ lookup('env', 'HOME') }}/src"
+src: "{{ download_to }}/vim-{{ version }}"

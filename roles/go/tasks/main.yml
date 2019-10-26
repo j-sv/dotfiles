@@ -1,0 +1,6 @@
+- name: download and unpack
+  unarchive:
+    src: https://dl.google.com/go/go1.13.3.linux-amd64.tar.gz
+    dest: /usr/local
+    remote_src: yes
+  become: yes

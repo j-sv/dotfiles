@@ -1,0 +1,11 @@
+- name: Install
+  hosts: 127.0.0.1
+  connection: local
+
+  become_user: root
+
+  roles:
+    - go
+    - dwm
+    - st
+    - vim
