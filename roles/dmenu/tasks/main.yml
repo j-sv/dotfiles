@@ -1,0 +1,19 @@
+- name: remove any prior clone
+  file:
+    path: ~/src/dmenu
+    state: absent
+- name: clone dwm repository
+  git:
+    repo: git://git.suckless.org/dmenu
+    dest: ~/src/dmenu
+    update: yes
+    force: yes
+    version: 4.9
+- name: build
+  make:
+    chdir: ~/src/dmenu
+- name: install
+  make:
+    chdir: "{{ lookup('env', 'HOME') }}/src/dmenu"
+    target: install
+  become: yes
