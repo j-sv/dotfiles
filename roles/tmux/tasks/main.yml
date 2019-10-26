@@ -1,0 +1,14 @@
+- name: install packages
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - tmux
+    - tmux-plugin-manager
+    - tmuxinator
+    - urlview
+  become: yes
+- name: ~/.tmux.conf
+  file:
+    src: "{{ role_path }}/files/tmux.conf"
+    path: "{{ lookup('env', 'HOME') }}/.tmux.conf"
+    state: link
