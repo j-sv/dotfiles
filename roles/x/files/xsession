@@ -2,6 +2,18 @@
 
 systemctl --user import-environment DISPLAY XAUTHORITY PATH
 
+systemctl --user --no-block start xsession.target
+
 xsetroot -solid '#002b36'
+
+setxkbmap -model hhk us altgr-intl
+
+while [ 0 ]; do
+  xset s 0 0
+  xset s off
+  xset -dpms
+  xset s noblank
+  sleep 5
+done &
 
 exec /usr/local/bin/dwm
