@@ -9,12 +9,15 @@ Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 " fzf
-Plug 'junegunn/fzf', { 'tag': '*', 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'tag': '*', 'dir': '~/.fzf', 'do': './install --all --no-zsh --no-fish' }
 Plug 'junegunn/fzf.vim'
 Plug 'tweekmonster/fzf-filemru'
 
 " fancy colors
 Plug 'lifepillar/vim-solarized8'
+Plug 'reedes/vim-colors-pencil'
+
+Plug 'junegunn/goyo.vim'
 
 " git stuff
 Plug 'tpope/vim-fugitive', { 'tag': '*' }
@@ -66,6 +69,7 @@ set completeopt-=preview
 set mouse-=a
 set hidden
 set noshowmode
+set updatetime=300
 
 " backup
 set backupdir=~/.vim-tmp/backup/
@@ -76,6 +80,32 @@ set undofile
 set undodir=~/.vim-tmp/undo/
 set writebackup
 
+" speedup syntax highlighting
+set nocursorcolumn
+set nocursorline
+syntax sync minlines=256
+
+" Time out on key codes but not mappings.
+" Basically this makes terminal Vim work sanely.
+set ttimeout
+set ttimeoutlen=10
+
+" wildmenu completion settings
+set wildmenu
+set wildmode=list:full                           " Wildcard matches the longest and shows a list
+set wildignore+=.hg,.git,.svn                    " Version control
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
+set wildignore+=*.spl                            " compiled spelling word lists
+set wildignore+=*.sw?                            " Vim swap files
+set wildignore+=*.DS_Store                       " OSX bullshit
+set wildignore+=*.luac                           " Lua byte code
+set wildignore+=go/pkg                           " Go static files
+set wildignore+=go/bin                           " Go bin files
+set wildignore+=go/bin-vagrant                   " Go bin-vagrant files
+set wildignore+=*.pyc                            " Python byte code
+set wildignore+=*.orig                           " Merge resolution files
+
 " mappings
 let mapleader=","
 
@@ -84,6 +114,10 @@ nmap <S-Tab> <c-w>W
 
 nmap <leader>w :w!<cr>
 map <leader><space> :let @/=''
+
+map <leader>W :%s/\s\+$//<cr>:let @/=''<cr>
+map <leader>S :set nolist!<cr>
+map <leader>s <C-w>v<C-w>l
 
 " coc.nvim
 let g:coc_global_extensions = [
@@ -113,18 +147,25 @@ set rtp+=~/.fzf
 
 nnoremap <silent><C-p> :FilesMru<cr>
 nnoremap <silent><C-l> :Lines<cr>
+nnoremap <silent><C-b> :Buffers<cr>
 
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
+" fugitive
+:au BufReadPost fugitive://* set bufhidden=delete
+:au BufEnter */.git/index nnoremap <buffer> pr :Git pull --rebase<cr>
+:au BufEnter */.git/index nnoremap <buffer> grp :Git review --yes --no-rebase<cr>
+
+" fzf
 let g:fzf_action = {
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \ }
 let g:fzf_layout = { 'down': '~30%' }
 let g:fzf_colors =
-      \ { 'fg':      ['fg', 'Normal'],
+\ { 'fg':    ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
   \ 'hl':      ['fg', 'Comment'],
   \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
@@ -137,13 +178,8 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
-let $FZF_DEFAULT_COMMAND='ag --hidden --ignore=.git -g ""'
+let $FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude bob""'
 let $FZF_DEFAULT_OPTS='-e --bind ctrl-a:select-all'
-
-" fugitive
-autocmd BufReadPost fugitive://* set bufhidden=delete
-autocmd BufEnter */.git/index nnoremap <buffer> pr :Git pull --rebase<cr>
-autocmd BufEnter */.git/index nnoremap <buffer> grp :Git review --yes --no-rebase<cr>
 
 " vim-go
 let g:go_decls_mode = 'fzf'
@@ -159,6 +195,7 @@ let g:go_highlight_function_calls = 1
 let g:go_highlight_operators = 1
 let g:go_statusline_duration = 10000
 
+" bindings
 autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>t  <Plug>(go-test)
 autocmd FileType go nmap <leader>tc <Plug>(go-test-compile)
@@ -172,6 +209,18 @@ autocmd FileType go imap © <ESC>:GoDeclsDir<CR>
 " gitgutter
 autocmd BufWritePost * GitGutter
 
+" goyo
+function! s:goyo_enter()
+  colorscheme pencil
+endfunction
+
+function! s:goyo_leave()
+  colorscheme solarized8
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
 " vim-indent-guides
 let g:indent_guides_start_level = 2
 
@@ -183,7 +232,7 @@ autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=NONE ctermbg=NONE
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=NONE ctermbg=0
 
 " mutt
-autocmd BufNewFile,BufRead ~/.mutt/tmp/neomutt-* set tw=72 fo=watqc nojs nosmartindent
+au BufNewFile,BufRead ~/.mutt/tmp/neomutt-* set tw=72 fo=watqc nojs nosmartindent
                                              \ | match ErrorMsg '\s\+$'
 
 " lightline
