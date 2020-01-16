@@ -1,0 +1,15 @@
+- name: link bashrc
+  file:
+    src: "{{ role_path }}/files/bashrc"
+    path: "{{ lookup('env', 'HOME') }}/.bashrc"
+    state: link
+
+- name: create directory for completions
+  file:
+    path: "{{ lookup('env', 'USER') }}/.local/completions"
+    state: directory
+
+- name: generate completions for kubectl
+  command: kubectl completion bash > "{{ lookup('env', 'USER') }}/.local/completions/kubectl.bash"
+- name: generate completions for helm
+  command: helm completion bash > "{{ lookup('env', 'USER') }}/.local/completions/helm.bash"
