@@ -9,10 +9,12 @@
     - libxt-dev
     - silversearcher-ag
   become: yes
+
 - name: make sure src directory exists
   file:
     path: "{{ download_to }}"
     state: directory
+
 - name: download and unpack
   unarchive:
     src: "{{ uri }}"
@@ -33,6 +35,7 @@
     chdir: "{{ src }}"
     target: install
   become: yes
+
 - name: copy vimrc
   file:
     src: "{{ role_path }}/files/vimrc"
