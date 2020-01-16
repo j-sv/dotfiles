@@ -1,0 +1,4 @@
+version: "20191207"
+uri: "https://github.com/neomutt/neomutt/archive/{{ version }}.tar.gz"
+download_to: "{{ lookup('env', 'HOME') }}/src"
+src: "{{ download_to }}/neomutt-{{ version }}"

@@ -1,0 +1,81 @@
+- name: install dependencies
+  apt:
+    pkg:
+      - notmuch
+      - libtokyocabinet-dev
+      - libslang2-dev
+      - libssl1.0-dev
+      - libsasl2-dev
+- name: make sure src directory exists
+  file:
+    path: "{{ download_to }}"
+    state: directory
+- name: download and unpack
+  unarchive:
+    src: "{{ uri }}"
+    dest: "{{ download_to }}"
+    remote_src: yes
+    creates: "{{ src }}"
+- name: configure
+  command: ./configure --with-ui=slang --tokyocabinet --ssl --sasl --notmuch
+  args:
+    chdir: "{{ src }}"
+- name: build
+  make:
+    chdir: "{{ src }}"
+    params:
+      j: 4
+- name: install
+  make:
+    chdir: "{{ src }}"
+    target: install
+  become: yes
+
+- name: create root config directory
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.mutt"
+    state: directory
+- name: create directory for certificates
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.smime/certificates"
+    state: directory
+- name: create directory for keys
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.smime/keys"
+    state: directory
+
+- name: link muttrc
+  file:
+    src: "{{ role_path }}/files/muttrc"
+    path: "{{ lookup('env', 'HOME') }}/.mutt/muttrc"
+    state: link
+- name: link smime settings
+  file:
+    src: "{{ role_path }}/files/smime"
+    path: "{{ lookup('env', 'HOME') }}/.mutt/smime"
+    state: link
+- name: link colorschemes
+  file:
+    src: "{{ role_path }}/files/colors"
+    path: "{{ lookup('env', 'HOME') }}/.mutt/colors"
+    state: link
+- name: link lang settings
+  file:
+    src: "{{ role_path }}/files/lang"
+    path: "{{ lookup('env', 'HOME') }}/lang"
+    state: link
+- name: link sidebar settings
+  file:
+    src: "{{ role_path }}/files/sidebar"
+    path: "{{ lookup('env', 'HOME') }}/sidebar"
+    state: link
+- name: link bind settings
+  file:
+    src: "{{ role_path }}/files/binds"
+    path: "{{ lookup('env', 'HOME') }}/binds"
+    state: link
+- name: link mailcap settings
+  file:
+    src: "{{ role_path }}/files/mailcap"
+    path: "{{ lookup('env', 'HOME') }}/mailcap"
+    state: link

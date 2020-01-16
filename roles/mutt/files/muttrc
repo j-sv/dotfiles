@@ -1,0 +1,71 @@
+# vim: ft=muttrc
+
+source ~/.mutt/lang/en_US
+source ~/.mutt/binds
+source ~/.mutt/sidebar
+source ~/.mutt/themes/mutt-colors-solarized-dark-16.muttrc
+source ~/.mutt/smime
+
+source /usr/share/doc/neomutt/vim-keys/vim-keys.rc
+
+set print_command="muttprint"
+
+# Paths ----------------------------------------------
+
+# Editor Settings -------------------------------------
+set editor       = "vim +/^$/+1 +':noh' -c \"set spell spelllang=en\""
+set index_format = "%4C %Z %d %-15.15L (%2e) %s"
+set beep_new     = yes
+
+set text_flowed = yes
+
+set query_command ="lbdbq '%s'" # how to query the exchange ldap database bind editor "\t"
+
+unset crypt_use_gpgme
+
+folder-hook . 'set read_inc=1000'
+
+# Notmuch
+set nm_query_type = threads
+set virtual_spoolfile = yes
+
+virtual-mailboxes "inbox" "notmuch://?query=tag:inbox and NOT tag:archive"
+
+macro index \\ "<vfolder-from-query>"
+macro index,pager A "<modify-labels>+archive -unread -inbox\\n"
+
+# Status Bar -----------------------------------------
+set status_chars  = " *%A"
+set status_format = "───[ Folder: %f ]───[%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]───%>─%?p?( %p postponed )?───"
+
+# Header Options -------------------------------------
+ignore *                                # ignore all headers
+unignore from to cc date subject   # show only these
+unhdr_order *                           # some distros order things by default
+hdr_order from to cc date subject  # and in this order
+
+set date_format = "%Y-%m-%d %H:%M"
+set sort = reverse-threads
+set sort_aux = last-date-received
+set uncollapse_jump                        # don't collapse on an unread message
+set sort_re                                # thread based on regex
+
+# Pager View Options ---------------------------------
+set pager_index_lines = 10 # number of index lines to show
+set pager_context = 3      # number of context lines to show
+set pager_stop             # don't go to next message automatically
+set menu_scroll            # scroll in menus
+set tilde                  # show tildes like in vim
+unset markers              # no ugly plus signs
+set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+
+# Pager Key Bindings ---------------------------------
+
+## Make quick html view macro
+bind index,pager V  noop        ## Unbinds V from version
+macro index,pager V "<view-attachments><search>html<enter><view-mailcap><exit>"
+
+auto_view text/html
+auto_view text/calendar application/ics
+alternative_order text/calendar text/plain text/enriched text/html
+

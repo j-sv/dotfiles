@@ -1,0 +1,12 @@
+# vim: ft=muttrc
+
+bind index,pager R group-reply
+
+bind index,pager B sidebar-toggle-visible
+bind index,pager  <down> sidebar-next
+bind index,pager  <up> sidebar-prev
+bind index,pager  <right> sidebar-open
+
+bind attach <return> view-mailcap
+
+bind index,pager X change-vfolder
