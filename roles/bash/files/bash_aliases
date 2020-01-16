@@ -1,0 +1,21 @@
+alias today='t d --start "`date +%d\ %B\ %Y`" --end "`date +%d\ %B\ %Y`"'
+
+alias ssh='ssh -q'
+alias v='vim'
+
+alias g='git'
+alias h='helm'
+alias k='kubectl'
+alias kctx='kubectx'
+alias kns='kubens'
+alias watch='watch '
+
+alias cdt='cd $(mktemp -d)'
+
+alias tn='tmux new -A -s $(basename $(pwd))'
+
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+alias psu='ps -fjHu $USER'

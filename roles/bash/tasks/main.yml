@@ -4,6 +4,12 @@
     path: "{{ lookup('env', 'HOME') }}/.bashrc"
     state: link
 
+- name: link aliases
+  file:
+    src: "{{ role_path }}/files/bash_aliases"
+    path: "{{ lookup('env', 'HOME') }}/.bash_aliases"
+    state: link
+
 - name: create directory for completions
   file:
     path: "{{ lookup('env', 'USER') }}/.local/completions"
