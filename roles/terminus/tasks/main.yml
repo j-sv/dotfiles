@@ -28,5 +28,15 @@
     target: install
   become: yes
 
+- name: disable no bitmap fonts
+  file:
+    path: /etc/fonts/conf.d
+    state: absent
+- name: enable bitmap fonts
+  file:
+    src: /etc/fonts/conf.avail/70-yes-bitmaps.conf
+    path: /etc/fonts/conf.d/70-yes-bitmaps.conf
+    state: link
+
 - name: regenerate font cache
   command: fc-cache -fv
