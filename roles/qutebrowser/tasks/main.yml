@@ -1,0 +1,14 @@
+- name: install qutebrowser
+  apt:
+    pkg: qutebrowser
+
+- name: create config directory
+  file:
+    path: "{{ lookup('env', 'USER') }}/.config/qutebrowser"
+    state: directory
+
+- name: copy config file
+  file:
+    src: "{{ role_path }}/files/config.py"
+    path: "{{ lookup('env', 'HOME') }}/.config/qutebrowser/config.py"
+    state: link
