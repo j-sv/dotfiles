@@ -11,3 +11,19 @@
     group: root
     mode: u=rwx,g=rx,o=rx
   become: yes
+
+- name: install kubectl
+  snap:
+    name: kubectl
+    classic: yes
+  become: yes
+
+- name: install helm
+  snap:
+    name: helm
+    classic: yes
+  become: yes
+
+- name: install spotify
+  snap:
+    name: spotify
