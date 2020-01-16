@@ -1,0 +1,32 @@
+- name: make sure src directory exists
+  file:
+    path: "{{ download_to }}"
+    state: directory
+
+- name: download and unpack
+  unarchive:
+    src: "{{ uri }}"
+    dest: "{{ download_to }}"
+    remote_src: yes
+    creates: "{{ src }}"
+
+- name: apply td1 patch
+  patch:
+    src: "{{ src }}/alt/td1.diff"
+    dest: "{{ src }}/"
+    strip: 1
+
+- name: build
+  make:
+    chdir: "{{ src }}"
+    params:
+      j: 4
+
+- name: install
+  make:
+    chdir: "{{ src }}"
+    target: install
+  become: yes
+
+- name: regenerate font cache
+  command: fc-cache -fv
