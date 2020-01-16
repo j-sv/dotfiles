@@ -1,0 +1,63 @@
+#!/bin/bash
+
+. /usr/local/bin/statusbar-fuzzy-day.sh
+. /usr/local/bin/statusbar-fuzzy-time.sh
+. /usr/local/bin/statusbar-music.sh
+. /usr/local/kube-ps1.sh
+
+KUBE_PS1_PREFIX=""
+KUBE_PS1_SUFFIX=""
+KUBE_PS1_SYMBOL_ENABLE=false
+KUBE_PS1_SYMBOL_COLOR=""
+KUBE_PS1_CTX_COLOR=""
+KUBE_PS1_NS_COLOR=""
+KUBE_PS1_BG_COLOR=""
+KUBE_PS1_SEPARATOR=""
+_KUBE_PS1_OPEN_ESC=""
+_KUBE_PS1_CLOSE_ESC=""
+_KUBE_PS1_DEFAULT_BG=""
+_KUBE_PS1_DEFAULT_FG=""
+
+sep="│"
+
+bat(){
+  onl="$(</sys/class/power_supply/AC/online)"
+  charge="$(</sys/class/power_supply/BAT0/capacity)"
+  if [[ $onl -eq 0 && $charge -ge 15 ]]; then
+    printf "%b" "BT $charge%"
+  elif [[ $onl -eq 0 && $charge -le 14 ]]; then
+    printf "%b" "BT $charge%"
+  else
+    printf "%b" "AC $charge%"
+  fi
+}
+
+int(){
+  host google.com>/dev/null &&
+  printf "%b" "∆" || printf "%b" "∇"
+}
+
+mail(){
+  local unread=$(notmuch count -- tag:inbox and tag:unread)
+  if [ "$(systemctl --user is-active mailsync)" = "activating" ]; then
+    printf "%b" "$unread"
+  else
+    printf "%b" "$unread"
+  fi
+}
+
+nextmeeting(){
+    next="$(khal list --notstarted --day-format='' --format='{start-time}' "$(date +'%H:%M')" eod | head -n1)"
+    if [ "$next" = "No events" ]; then
+        printf "Freedom"
+    else
+        printf "Next $next"
+    fi
+}
+
+while true
+do
+    _kube_ps1_update_cache
+    xsetroot -name "$(printf "%b" "${sep}$(kube_ps1)${sep}$(bat)${sep}$(int)${sep}$(mail)${sep}$(music)${sep}$(__fuzzy_time)${sep}$(__fuzzy_day)")"
+    sleep 1s
+done

@@ -2,6 +2,7 @@
   file:
     path: ~/src
     state: directory
+
 - name: remove any prior clone
   file:
     path: ~/src/dwm
@@ -23,4 +24,48 @@
   make:
     chdir: "{{ lookup('env', 'HOME') }}/src/dwm"
     target: install
+  become: yes
+
+- name: download and unpack kube_ps1
+  unarchive:
+    src: "{{ kube_ps1_uri }}"
+    dest: "{{ download_to }}"
+    remote_src: yes
+    creates: "{{ kube_ps1_src }}"
+- name: copy kube_ps1 script
+  file:
+    src: "{{ kube_ps1_src }}/kube-ps1.sh"
+    dest: "/usr/local/bin/kube-ps1.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  become: yes
+
+- name: make sure .local/bin exists
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.local/bin"
+    state: directory
+- name: install statusbar script
+  file:
+    src: "{{ role_path }}/files/statusbar"
+    dest: "/usr/local/bin/statusbar"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  become: yes
+- name: install statusbar-fuzzy-time script
+  file:
+    src: "{{ role_path }}/files/statusbar-fuzzy-time.sh"
+    dest: "/usr/local/bin/statusbar-fuzzy-time.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  become: yes
+- name: install statusbar-fuzzy-day script
+  copy:
+    src: "{{ role_path }}/files/statusbar-fuzzy-day.sh"
+    dest: "/usr/local/bin/statusbar-fuzzy-day.sh"
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
   become: yes
