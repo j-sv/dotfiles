@@ -3,7 +3,7 @@
 . /usr/local/bin/statusbar-fuzzy-day.sh
 . /usr/local/bin/statusbar-fuzzy-time.sh
 . /usr/local/bin/statusbar-music.sh
-. /usr/local/kube-ps1.sh
+. /usr/local/bin/kube-ps1.sh
 
 KUBE_PS1_PREFIX=""
 KUBE_PS1_SUFFIX=""
