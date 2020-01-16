@@ -79,3 +79,8 @@
     src: "{{ role_path }}/files/mailcap"
     path: "{{ lookup('env', 'HOME') }}/mailcap"
     state: link
+- name: link view_attachment script
+  file:
+    src: "{{ role_path }}/files/view_attachment.sh"
+    path: "{{ lookup('env', 'HOME') }}/view_attachment."
+    state: link
