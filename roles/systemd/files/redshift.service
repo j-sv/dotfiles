@@ -1,0 +1,12 @@
+[Unit]
+Description=redshift
+After=syslog.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/redshift -l 11.97456000:57.70887000
+TimeoutSec=120
+
+[Install]
+WantedBy=xsession.target

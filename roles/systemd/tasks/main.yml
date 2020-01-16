@@ -1,0 +1,44 @@
+- name: create systemd user unit directory
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.config/systemd/user"
+    state: directory
+- name: xsession.target
+  file:
+    src: "{{ role_path }}/files/xsession.target"
+    path: "{{ lookup('env', 'HOME') }}/.config/systemd/user/xsession.target"
+    state: link
+- name: statusbar.service
+  file:
+    src: "{{ role_path }}/files/statusbar.service"
+    path: "{{ lookup('env', 'HOME') }}/.config/systemd/user/statusbar.service"
+    state: link
+- name: redshift.service
+  file:
+    src: "{{ role_path }}/files/redshift.service"
+    path: "{{ lookup('env', 'HOME') }}/.config/systemd/user/redshift.service"
+    state: link
+- name: enable xsession target
+  systemd:
+    scope: user
+    name: xsession.target
+    enabled: yes
+- name: enable statusbar
+  systemd:
+    scope: user
+    name: statusbar.service
+    enabled: yes
+- name: start statusbar
+  systemd:
+    scope: user
+    name: statusbar
+    state: started
+- name: enable redshift
+  systemd:
+    scope: user
+    name: redshift
+    enabled: yes
+- name: start redshift
+  systemd:
+    scope: user
+    name: redshift
+    state: started

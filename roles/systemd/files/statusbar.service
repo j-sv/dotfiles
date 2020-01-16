@@ -1,0 +1,11 @@
+[Unit]
+Description=statusbar
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/statusbar
+TimeoutSec=120
+
+[Install]
+WantedBy=xsession.target
