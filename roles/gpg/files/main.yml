@@ -1,0 +1,9 @@
+- name: make sure there's a config directory
+  file:
+    path: "{{ lookup('env', 'USER') }}/.gnupg"
+    state: directory
+- name: link gpg agent config
+  file:
+    src: "{{ role_path }}/files/gpg-agent.conf"
+    path: "{{ lookup('env', 'USER') }}/.gnupg/gpg-agent.conf"
+    state: link
