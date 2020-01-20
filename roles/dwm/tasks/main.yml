@@ -3,29 +3,54 @@
     path: ~/src
     state: directory
 
+- stat:
+    path: ~/src/dwm/dwm
+    get_checksum: yes
+  register: stat_src_dwm
+
+- stat:
+    path: /usr/local/bin/dwm
+    get_checksum: yes
+  register: stat_installed_dwm
+
+- set_fact:
+    dwm_built: "{{ stat_src_dwm.stat.exists and stat_src_dwm.stat.executable }}"
+    dwm_installed: "{{ stat_installed_dwm.stat.exists and stat_installed_dwm.stat.executable }}"
+- set_fact:
+    install_dwm: "{{ not (dwm_built and dwm_installed and stat_src_dwm.stat.checksum == stat_installed_dwm.stat.checksum) }}"
+
 - name: remove any prior clone
   file:
     path: ~/src/dwm
     state: absent
+  when: install_dwm
 - name: clone dwm repository
   git:
     repo: git://github.com/j-sv/dwm
     dest: ~/src/dwm
     update: yes
     force: yes
+  when: install_dwm
 - name: checkout patches tag
   command: git checkout j-sv-6.2
   args:
     chdir: ~/src/dwm
+  when: install_dwm
 - name: build
   make:
     chdir: ~/src/dwm
+  when: install_dwm
 - name: install
   make:
     chdir: "{{ lookup('env', 'HOME') }}/src/dwm"
     target: install
   become: yes
+  when: install_dwm
 
+- name: remove any previous kube_ps1 download
+  file:
+    path: "{{ kube_ps1_src }}"
+    state: absent
 - name: download and unpack kube_ps1
   unarchive:
     src: "{{ kube_ps1_uri }}"
@@ -33,7 +58,7 @@
     remote_src: yes
     creates: "{{ kube_ps1_src }}"
 - name: copy kube_ps1 script
-  file:
+  copy:
     src: "{{ kube_ps1_src }}/kube-ps1.sh"
     dest: "/usr/local/bin/kube-ps1.sh"
     owner: root
@@ -41,12 +66,8 @@
     mode: u=rwx,g=rx,o=rx
   become: yes
 
-- name: make sure .local/bin exists
-  file:
-    path: "{{ lookup('env', 'HOME') }}/.local/bin"
-    state: directory
 - name: install statusbar script
-  file:
+  copy:
     src: "{{ role_path }}/files/statusbar"
     dest: "/usr/local/bin/statusbar"
     owner: root
@@ -54,7 +75,7 @@
     mode: u=rwx,g=rx,o=rx
   become: yes
 - name: install statusbar-fuzzy-time script
-  file:
+  copy:
     src: "{{ role_path }}/files/statusbar-fuzzy-time.sh"
     dest: "/usr/local/bin/statusbar-fuzzy-time.sh"
     owner: root
