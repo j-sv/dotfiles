@@ -28,6 +28,9 @@ Plug 'airblade/vim-gitgutter'
 Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoUpdateBinaries' }
 Plug 'towolf/vim-helm'
 Plug 'nathanaelkane/vim-indent-guides', { 'tag': '*' }
+Plug 'pangloss/vim-javascript', { 'tag': '*' }
+Plug 'leafgarland/typescript-vim'
+Plug 'MaxMEllon/vim-jsx-pretty', { 'tag': '*' }
 
 call plug#end()
 
