@@ -5,11 +5,11 @@
   become_user: root
 
   roles:
-    - x
+    - {role: 'x', tags: 'x'}
     - {role: 'go', tags: 'go'}
-    - dwm
-    - dmenu
-    - st
-    - slock
-    - vim
-    - tmux
+    - {role: 'dwm', tags: 'dwm'}
+    - {role: 'dmenu', tags: 'dmenu'}
+    - {role: 'st', tags: 'st'}
+    - {role: 'slock', tags: 'slock'}
+    - {role: 'vim', tags: 'vim'}
+    - {role: 'tmux',tags: 'tmux'}
