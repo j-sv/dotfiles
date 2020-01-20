@@ -6,7 +6,7 @@
 
   roles:
     - x
-    - go
+    - {role: 'go', tags: 'go'}
     - dwm
     - dmenu
     - st

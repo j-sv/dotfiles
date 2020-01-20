@@ -1,6 +1,25 @@
+- name: check if binary exists
+  stat:
+    path: /usr/local/go/bin/go
+  register: go_stat
+
+- set_fact:
+    go_installed: "{{ go_stat.stat.exists and go_stat.stat.executable }}"
+
+- name: get go version
+  command: go version
+  register: go_version
+  when: go_installed
+  changed_when: false
+
+- set_fact:
+    correct_version: "{{ go_version.stdout.find(version) >= 0 }}"
+  when: go_installed
+
 - name: download and unpack
   unarchive:
-    src: https://dl.google.com/go/go1.13.3.linux-amd64.tar.gz
+    src: "https://dl.google.com/go/{{ version }}.linux-amd64.tar.gz"
     dest: /usr/local
     remote_src: yes
   become: yes
+  when: not go_installed or not correct_version
