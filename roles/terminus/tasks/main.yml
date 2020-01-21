@@ -13,7 +13,7 @@
 - name: apply td1 patch
   patch:
     src: "{{ src }}/alt/td1.diff"
-    dest: "{{ src }}/"
+    basedir: "{{ src }}"
     strip: 1
 
 - name: build
@@ -30,13 +30,15 @@
 
 - name: disable no bitmap fonts
   file:
-    path: /etc/fonts/conf.d
+    path: /etc/fonts/conf.d/70-no-bitmaps.conf
     state: absent
+  become: yes
 - name: enable bitmap fonts
   file:
-    src: /etc/fonts/conf.avail/70-yes-bitmaps.conf
+    src: ../conf.avail/70-yes-bitmaps.conf
     path: /etc/fonts/conf.d/70-yes-bitmaps.conf
     state: link
+  become: yes
 
 - name: regenerate font cache
   command: fc-cache -fv

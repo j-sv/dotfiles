@@ -1,10 +1,11 @@
 - name: install qutebrowser
   apt:
     pkg: qutebrowser
+  become: yes
 
 - name: create config directory
   file:
-    path: "{{ lookup('env', 'USER') }}/.config/qutebrowser"
+    path: "{{ lookup('env', 'HOME') }}/.config/qutebrowser"
     state: directory
 
 - name: copy config file

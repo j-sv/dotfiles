@@ -6,10 +6,15 @@
 
   roles:
     - {role: 'x', tags: 'x'}
+    - {role: 'packages', tags: 'packages'}
+    - {role: 'systemd', tags: 'systemd'}
     - {role: 'go', tags: 'go'}
     - {role: 'dwm', tags: 'dwm'}
     - {role: 'dmenu', tags: 'dmenu'}
     - {role: 'st', tags: 'st'}
     - {role: 'slock', tags: 'slock'}
     - {role: 'vim', tags: 'vim'}
-    - {role: 'tmux',tags: 'tmux'}
+    - {role: 'tmux', tags: 'tmux'}
+    - {role: 'qutebrowser', tags: 'qutebrowser'}
+    - {role: 'terminus', tags: 'terminus'}
+    - {role: 'bash', tags: 'bash'}

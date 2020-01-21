@@ -60,8 +60,8 @@ export PS1="\n\[\033[32m\][\w]\[\033[0m\]\n\$(__git_ps1 '\[\033[34m\]%s\[\033
 _completion_loader git
 complete -o bashdefault -o default -o nospace -F _git g
 
-. ~/.completions/kubectl.bash
-. ~/.completions/helm.bash
+. ~/.local/completions/kubectl.bash
+. ~/.local/completions/helm.bash
 
 complete -F __start_kubectl k
 complete -F __start_helm h

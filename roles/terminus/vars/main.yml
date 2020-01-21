@@ -1,4 +1,4 @@
 version: "4.48"
 uri: "https://sourceforge.net/projects/terminus-font/files/terminus-font-{{ version }}/terminus-font-{{ version }}.tar.gz/download"
-download_to: "{{ lookup('env', 'USER') }}/src"
+download_to: "{{ lookup('env', 'HOME') }}/src"
 src: "{{ download_to }}/terminus-font-{{ version }}"

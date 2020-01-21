@@ -58,6 +58,7 @@ nextmeeting(){
 while true
 do
     _kube_ps1_update_cache
-    xsetroot -name "$(printf "%b" "${sep}$(kube_ps1)${sep}$(bat)${sep}$(int)${sep}$(mail)${sep}$(music)${sep}$(__fuzzy_time)${sep}$(__fuzzy_day)")"
+    #xsetroot -name "$(printf "%b" "${sep}$(kube_ps1)${sep}$(bat)${sep}$(int)${sep}$(mail)${sep}$(music)${sep}$(__fuzzy_time)${sep}$(__fuzzy_day)")"
+    xsetroot -name "$(printf "%b" "${sep}$(__fuzzy_time)${sep}$(__fuzzy_day)")"
     sleep 1s
 done

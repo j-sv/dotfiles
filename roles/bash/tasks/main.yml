@@ -12,10 +12,20 @@
 
 - name: create directory for completions
   file:
-    path: "{{ lookup('env', 'USER') }}/.local/completions"
+    path: "{{ lookup('env', 'HOME') }}/.local/completions"
     state: directory
 
 - name: generate completions for kubectl
-  command: kubectl completion bash > "{{ lookup('env', 'USER') }}/.local/completions/kubectl.bash"
+  command: kubectl completion bash
+  register: kubectl_completion
+- name: write kubectl completion to file
+  copy:
+    content: "{{ kubectl_completion.stdout }}"
+    dest: "{{ lookup('env', 'HOME') }}/.local/completions/helm.bash"
 - name: generate completions for helm
-  command: helm completion bash > "{{ lookup('env', 'USER') }}/.local/completions/helm.bash"
+  command: helm completion bash
+  register: helm_completion 
+- name: write helm completion to file
+  copy:
+    content: "{{ helm_completion.stdout }}"
+    dest: "{{ lookup('env', 'HOME') }}/.local/completions/kubectl.bash"
