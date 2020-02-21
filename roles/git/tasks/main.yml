@@ -1,0 +1,14 @@
+- name: ensure the config directory exists
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.config/git"
+    state: directory
+
+- name: link config files
+  file:
+    src: "{{ role_path }}/files/{{ item }}"
+    path: "{{ lookup('env', 'HOME') }}/.config/git/{{ item }}"
+    state: link
+  with_items:
+    - config
+    - personal
+    - acorn

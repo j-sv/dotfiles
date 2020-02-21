@@ -18,3 +18,4 @@
     - {role: 'qutebrowser', tags: 'qutebrowser'}
     - {role: 'terminus', tags: 'terminus'}
     - {role: 'bash', tags: 'bash'}
+    - {role: 'git', tags: 'git'}

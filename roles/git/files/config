@@ -1,0 +1,6 @@
+[alias]
+l = log --all --decorate --oneline --graph
+st = status -s
+
+[includeIf "gitdir:~/dev/priv/"]
+  path=~/.config/git/personal
