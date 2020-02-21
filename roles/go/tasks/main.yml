@@ -7,7 +7,7 @@
     go_installed: "{{ go_stat.stat.exists and go_stat.stat.executable }}"
 
 - name: get go version
-  command: go version
+  command: /usr/local/go/bin/go version
   register: go_version
   when: go_installed
   changed_when: false

@@ -1,3 +1,9 @@
+- name: install prerequisites
+  apt:
+    name: ['libxrandr-dev']
+    state: present
+  become: yes
+
 - name: make sure ~/src exists for clones
   file:
     path: ~/src

@@ -1,8 +1,18 @@
+- name: remove any existing bashrc
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.bashrc"
+    state: absent
+
 - name: link bashrc
   file:
     src: "{{ role_path }}/files/bashrc"
     path: "{{ lookup('env', 'HOME') }}/.bashrc"
     state: link
+
+- name: remove any existing bash_aliases
+  file:
+    path: "{{ lookup('env', 'HOME') }}/.bash_aliases"
+    state: absent
 
 - name: link aliases
   file:
