@@ -1,0 +1,1 @@
+dest: "{{ lookup('env', 'HOME') }}/.gnupg"

@@ -9,6 +9,7 @@
   file:
     path: "{{ dest }}"
     state: directory
+    mode: 0700
 
 - name: link gpg agent config
   file:
