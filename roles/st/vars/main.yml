@@ -1,0 +1,4 @@
+version: j-sv-0.8.2
+uri: github.com/j-sv/st
+download_to: "{{ lookup('env', 'HOME') }}/src"
+src: "{{ download_to }}/st"

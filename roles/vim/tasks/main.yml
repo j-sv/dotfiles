@@ -64,4 +64,4 @@
     state: link
 
 - name: install plugins
-  command: vim +PlugInstall +qall
+  command: vim +'PlugInstall --sync' +qall &> /dev/null < /dev/tty

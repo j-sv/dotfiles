@@ -1,0 +1,4 @@
+version: "4.9"
+uri: git.suckless.org/dmenu
+download_to: "{{ lookup('env', 'HOME') }}/src"
+src: "{{ download_to }}/dmenu"

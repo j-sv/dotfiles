@@ -3,11 +3,17 @@
   "diagnostic.messageTarget": "echo",
   "signature.target": "echo",
   "coc.preferences.hoverTarget": "echo",
+  "yaml.trace.server": "verbose",
   "languageserver":{
     "golang": {
       "command": "gopls",
       "rootPatterns": ["go.mod"],
       "filetypes": ["go"]
+    },
+    "terraform": {
+      "command": "terraform-lsp",
+      "filetypes": ["terraform","tf"],
+      "initializationOptions": {}
     }
   }
 }

@@ -16,6 +16,13 @@
     correct_version: "{{ go_version.stdout.find(version) >= 0 }}"
   when: go_installed
 
+- name: remove old install
+  file:
+    path: /usr/local/go
+    state: absent
+  become: yes
+  when: not correct_version
+
 - name: download and unpack
   unarchive:
     src: "https://dl.google.com/go/{{ version }}.linux-amd64.tar.gz"

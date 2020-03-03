@@ -1,4 +1,7 @@
+version: j-sv-6.2
+uri: "github.com/j-sv/dwm"
 download_to: "{{ lookup('env', 'HOME') }}/src"
+src: "{{ download_to }}/dwm"
 
 kube_ps1_version: "v0.7.0"
 kube_ps1_uri: "https://github.com/jonmosco/kube-ps1/archive/{{ kube_ps1_version }}.tar.gz"

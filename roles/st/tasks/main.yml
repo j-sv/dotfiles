@@ -1,26 +1,24 @@
-- name: make sure ~/src exists for clones
+- name: make sure source directory exists for clones
   file:
-    path: ~/src
+    path: "{{ download_to }}"
     state: directory
-- name: remove any prior clone
-  file:
-    path: ~/src/st
-    state: absent
-- name: clone dwm repository
+
+- name: clone repository
   git:
-    repo: git://github.com/j-sv/st
-    dest: ~/src/st
-    update: yes
-    force: yes
-- name: checkout patches tag
-  command: git checkout j-sv-0.8.2
-  args:
-    chdir: ~/src/st
+    repo: "git://{{ uri }}"
+    dest: "{{ src }}"
+    version: "{{ version }}"
+
 - name: build
   make:
-    chdir: ~/src/st
+    chdir: "{{ src }}"
+    params:
+      j: 4
+  changed_when: false
+
 - name: install
   make:
-    chdir: "{{ lookup('env', 'HOME') }}/src/st"
+    chdir: "{{ src }}"
     target: install
   become: yes
+  changed_when: false

@@ -1,68 +1,49 @@
 - name: install prerequisites
   apt:
-    name: ['libx11-dev', 'libxft-dev', 'libxinerama-dev']
+    name:
+      - libx11-dev
+      - libxft-dev
+      - libxinerama-dev
     state: present
   become: yes
 
-- name: make sure ~/src exists for clones
+- name: make sure source directory exists for clones
   file:
-    path: ~/src
+    path: "{{ download_to }}"
     state: directory
 
-- stat:
-    path: ~/src/dwm/dwm
-    get_checksum: yes
-  register: stat_src_dwm
-
-- stat:
-    path: /usr/local/bin/dwm
-    get_checksum: yes
-  register: stat_installed_dwm
-
-- set_fact:
-    dwm_built: "{{ stat_src_dwm.stat.exists and stat_src_dwm.stat.executable }}"
-    dwm_installed: "{{ stat_installed_dwm.stat.exists and stat_installed_dwm.stat.executable }}"
-- set_fact:
-    install_dwm: "{{ not (dwm_built and dwm_installed and stat_src_dwm.stat.checksum == stat_installed_dwm.stat.checksum) }}"
-
-- name: remove any prior clone
-  file:
-    path: ~/src/dwm
-    state: absent
-  when: install_dwm
-- name: clone dwm repository
+- name: clone repository
   git:
-    repo: git://github.com/j-sv/dwm
-    dest: ~/src/dwm
-    update: yes
-    force: yes
-  when: install_dwm
-- name: checkout patches tag
-  command: git checkout j-sv-6.2
-  args:
-    chdir: ~/src/dwm
-  when: install_dwm
+    repo: "git://{{ uri }}"
+    dest: "{{ src }}"
+    version: "{{ version }}"
+
 - name: build
   make:
-    chdir: ~/src/dwm
-  when: install_dwm
+    chdir: "{{ src }}"
+    params:
+      j: 4
+  changed_when: false
+
 - name: install
   make:
-    chdir: "{{ lookup('env', 'HOME') }}/src/dwm"
+    chdir: "{{ src }}"
     target: install
   become: yes
-  when: install_dwm
+  changed_when: false
 
 - name: remove any previous kube_ps1 download
   file:
     path: "{{ kube_ps1_src }}"
     state: absent
+  changed_when: false
 - name: download and unpack kube_ps1
   unarchive:
     src: "{{ kube_ps1_uri }}"
     dest: "{{ download_to }}"
     remote_src: yes
     creates: "{{ kube_ps1_src }}"
+  changed_when: false
 - name: copy kube_ps1 script
   copy:
     src: "{{ kube_ps1_src }}/kube-ps1.sh"
@@ -71,6 +52,7 @@
     group: root
     mode: u=rwx,g=rx,o=rx
   become: yes
+  changed_when: false
 
 - name: install statusbar script
   copy:
@@ -80,6 +62,7 @@
     group: root
     mode: u=rwx,g=rx,o=rx
   become: yes
+  changed_when: false
 - name: install statusbar-fuzzy-time script
   copy:
     src: "{{ role_path }}/files/statusbar-fuzzy-time.sh"
@@ -88,6 +71,7 @@
     group: root
     mode: u=rwx,g=rx,o=rx
   become: yes
+  changed_when: false
 - name: install statusbar-fuzzy-day script
   copy:
     src: "{{ role_path }}/files/statusbar-fuzzy-day.sh"
@@ -96,3 +80,4 @@
     group: root
     mode: u=rwx,g=rx,o=rx
   become: yes
+  changed_when: false

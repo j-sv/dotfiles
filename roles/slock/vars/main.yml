@@ -1,0 +1,4 @@
+version: "j-sv-1.4"
+url: github.com/j-sv/slock
+download_to: "{{ lookup('env', 'HOME') }}/src"
+src: "{{ download_to }}/slock"

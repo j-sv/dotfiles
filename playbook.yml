@@ -19,3 +19,6 @@
     - {role: 'terminus', tags: 'terminus'}
     - {role: 'bash', tags: 'bash'}
     - {role: 'git', tags: 'git'}
+    - {role: 'gpg', tags: 'gpg'}
+    - {role: 'docker', tags: 'docker'}
+    - {role: 'terraform', tags: 'terraform'}

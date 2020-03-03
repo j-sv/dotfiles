@@ -1,35 +1,33 @@
 - name: install prerequisites
   apt:
-    name: ['libxrandr-dev']
+    name:
+      - libxrandr-dev
     state: present
   become: yes
 
-- name: make sure ~/src exists for clones
+- name: make sure source directory exists for clones
   file:
-    path: ~/src
+    path: "{{ download_to }}"
     state: directory
-- name: remove any prior clone
-  file:
-    path: ~/src/slock
-    state: absent
+
 - name: clone dwm repository
   git:
-    repo: git://github.com/j-sv/slock
-    dest: ~/src/slock
-    update: yes
-    force: yes
-- name: checkout patches tag
-  command: git checkout j-sv-1.4
-  args:
-    chdir: ~/src/slock
+    repo: "git://{{ url }}"
+    dest: "{{ src }}"
+    version: "{{ version }}"
+
 - name: build
   make:
-    chdir: ~/src/slock
+    chdir: "{{ src }}"
+  changed_when: false
+
 - name: install
   make:
-    chdir: "{{ lookup('env', 'HOME') }}/src/slock"
+    chdir: "{{ src }}"
     target: install
   become: yes
+  changed_when: false
+
 - name: suid
   file:
     path: /usr/local/bin/slock

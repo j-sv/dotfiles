@@ -49,7 +49,7 @@ autocmd ColorScheme solarized8 hi StatusLine  ctermfg=246 ctermbg=NONE guifg=#83
                            \ | hi Normal     ctermbg=NONE
                            \ | hi nonText    ctermbg=NONE
 
-colorscheme solarized8
+silent! colorscheme solarized8
 
 " search
 set ignorecase
@@ -124,6 +124,10 @@ map <leader>S :set nolist!<cr>
 map <leader>s <C-w>v<C-w>l
 
 " coc.nvim
+
+let g:coc_filetype_map = {
+  \ 'yaml.ansible': 'yaml',
+  \ }
 let g:coc_global_extensions = [
   \ 'coc-json',
   \ 'coc-python',
